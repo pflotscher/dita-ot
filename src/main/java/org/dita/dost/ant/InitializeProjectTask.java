@@ -15,6 +15,7 @@ import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.util.ProcessUtil;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StoreBuilder;
@@ -57,8 +58,12 @@ public final class InitializeProjectTask extends Task {
     }
     File tempDir = toFile(getProject().getUserProperty(ANT_TEMP_DIR));
     if (tempDir == null) {
+      String tempDirString = getProject().getProperty(ANT_TEMP_DIR);
+      tempDirString = tempDirString.concat(ProcessUtil.getProcessId("001"));
+      getProject().setProperty(ANT_TEMP_DIR, tempDirString);
       tempDir = toFile(getProject().getProperty(ANT_TEMP_DIR));
     }
+
     for (StoreBuilder storeBuilder : storeBuilderLoader) {
       if (storeBuilder.getType().equals(storeType)) {
         return storeBuilder.setTempDir(tempDir).setXmlUtils(xmlUtils).build();
