@@ -602,12 +602,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       } catch (URISyntaxException e) {
         // Ignore
       }
-      if (pluginFile.contains("@")) {
-        final String[] tokens = pluginFile.split("@");
+      final String pluginFileName = Paths.get(pluginFile).getFileName().toString();
+      if (pluginFileName.contains("@")) {
+        final String[] tokens = pluginFileName.split("@");
         pluginInstall.setPluginName(tokens[0]);
         pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
       } else {
-        pluginInstall.setPluginName(pluginFile);
+        pluginInstall.setPluginName(pluginFileName);
         pluginInstall.setPluginVersion(null);
       }
     }
